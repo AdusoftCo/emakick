@@ -18,7 +18,7 @@ session_start(); #inicializamos variables de sesion
      <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="estilos.css">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="" href="ico8-tecno-verde-94.png">
     <title>Categorías</title>
     <style>
             *{
@@ -45,13 +45,6 @@ session_start(); #inicializamos variables de sesion
             
             .img__modificar {
                 width: 400px!important;
-            }
-
-            a:link{
-                text-decoration: none;
-            }
-            .card-title{
-                color: rgb(10, 248, 192);
             }
             
             .card__mobile{
@@ -115,14 +108,14 @@ session_start(); #inicializamos variables de sesion
                         </div>-->
                     </li>
                     
-                    <!--<li class="nav-item">
+                    <li class="nav-item">
                         <div class="container-fluid ">
                             <a class="navbar-brand p-4 d-flex" href="index_admin.php">
                             <img src="imagenes/server.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                            Ver Proyectos
+                            Volver a Categorías
                             </a>
                         </div>
-                        <div class="p-3 d-flex ">
+                        <!--<div class="p-3 d-flex ">
                             <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
                             <lord-icon
                                 src="imagenes/112-book-morph-outline-edited.json"
@@ -151,10 +144,12 @@ session_start(); #inicializamos variables de sesion
                     </li>-->
                     <li class="nav-item">
                         <div class="container-fluid">
+                            
                             <a class="navbar-brand p-4 d-flex" href="cerrar.php">
                             <img src="imagenes/business.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                            <span>Cerrar Sesión de Usuario : <?php echo $_SESSION['usuario']; ?> </span>
+                            Cerrar Sesión Usuario : <span><?php echo $_SESSION['usuario']; ?></span>
                             </a>
+                            
                         </div>
                         <!--<div class="p-3 d-flex">
                             <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>

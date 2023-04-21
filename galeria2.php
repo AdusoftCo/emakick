@@ -1,17 +1,6 @@
 <?php include 'headerd.php';?>
-
 <?php
-#Seccion que TOMA variables para ALTA de Registro
-if($_POST){  
-    # si hay envio de datos, los inserto en la base de datos  
-
-    #debemos recuperar la imagen actual y borrarla del servidor para lugar pisar con la nueva imagen en el server y en la base de datos
-    #recuperamos la imagen de la base antes de borrar 
-    #$imagen = $conexion->consultar("select imagen FROM `proyectos` where id=".$id);
-    #la borramos de la carpeta 
-    #unlink("imagenes/".$imagen[0]['imagen']);
-
-    #levantamos los datos del formulario
+if($_POST){  # si hay envio de datos, los inserto en la base de datos  
     #$id = $_SESSION['id'];
     $cod_art = $_POST['cod_art'];
     $id_prov = $_POST['id_prov'];
@@ -19,6 +8,7 @@ if($_POST){
     $docena = $_POST['precio_doc'];
     $oferta = $_POST['precio_oferta'];
     $fecha_alta = $_POST['fecha_alta'];
+    
     #nombre de la imagen
     #$imagen = $_FILES['archivo']['name'];
     #tenemos que guardar la imagen en una carpeta 
@@ -27,57 +17,58 @@ if($_POST){
     #$fecha = new DateTime();
     #$imagen= $fecha->getTimestamp()."_".$imagen;
     #move_uploaded_file($imagen_temporal,"imagenes/".$imagen);
-
+    
     #creo una instancia(objeto) de la clase de conexion
     $conexion = new conexion();
     
-    $sql = "INSERT INTO `femeninterior` (`id`, `cod_art`, `id_prov`, `descripcion`, `precio_doc`, `precio_oferta`, `fecha_alta`, `fecha_baja`, `imagen`) 
-            VALUES (NULL, '$cod_art', $id_prov, '$descripcion', $docena, $oferta, '$fecha_alta', NULL, NULL)";
+    $sql = "INSERT INTO `medias` (`id`, `cod_art`, `id_prov`, `descripcion`, `precio_doc`, `precio_oferta`, `fecha_alta`) 
+            VALUES (NULL, '$cod_art', '$id_prov', '$descripcion', '$docena', '$oferta', '$fecha_alta')";
     
     $id_proyecto = $conexion->ejecutar($sql);
 
-    header("location:galeria.php");
+    header("location:galeria2.php");
     die();
 }
-#Seccion que TOMA variables pa Borrar o Modificar Registro
+ 
 if($_GET){
     #ademas de borrar de la base , tenemos que borrar la foto de la carpeta imagenes
-    if(isset($_GET['borrar'])){
-        $id = $_GET['borrar'];
+    if(isset($_GET['borrar2'])){
+        $id = $_GET['borrar2'];
         $conexion = new conexion();
-
         #borramos el registro de la base 
-        $sql ="DELETE FROM `femeninterior` WHERE `femeninterior`.`id` =".$id; 
+        $sql ="DELETE FROM `medias` WHERE `medias`.`id` =".$id;
+
         $id_proyecto = $conexion->ejecutar($sql);
          #para que no intente borrar muchas veces
-         header("Location:galeria.php");
+         header("Location:galeria2.php");
          die();
     }
 
-    if(isset($_GET['modificar'])){
-        $id = $_GET['modificar'];
-        header("Location:modificar.php?modificar=".$id);
+    if(isset($_GET['modifica2'])){
+        $id = $_GET['modifica2'];
+        header("Location:modifica2.php?modifica2=".$id);
         die();
     }
 }    
 
 $conexion = new conexion();
-$sql = "SELECT `femeninterior`.`id`,`femeninterior`.`cod_art`, `femeninterior`.`id_prov`, `femeninterior`.`descripcion`, `femeninterior`.`precio_doc`, 
-        `femeninterior`.`precio_oferta`, `fabricants`.`nombre` FROM `femeninterior` INNER JOIN `fabricants` ON `femeninterior`.`id_prov`=`fabricants`.`id`";
-$damas = $conexion -> consultar($sql);
+
+$sql = "SELECT `medias`.`id`, `medias`.`cod_art`, `medias`.`id_prov`, `medias`.`descripcion`, `medias`.`precio_doc`, 
+        `medias`.`precio_oferta`, `fabricants`.`nombre` FROM `medias` INNER JOIN `fabricants` ON `medias`.`id_prov`=`fabricants`.`id`";
+$medias = $conexion -> consultar($sql);
 ?> 
 
 <!-- FORMULARIO DE ALTA DE REGISTRO -->
 <div class="row d-flex justify-content-center mt-4 mb-5">
     <div class="col-md-8 col-sm-10">
-        <div class="card" style="background-color:#2bb6b0;">
+        <div class="card" style="background-color:#0daca5;">
             <div class="card-header text-center">
                 <i><b>Alta de Nuevo Registro</b></i>
             </div>
 
             <div class="card-body">
                     <!--para recepcionar archivos uso enctype-->
-                <form action="galeria.php" method="post" enctype="multipart/form-data">
+                <form action="galeria2.php" method="post" enctype="multipart/form-data">
                     <div>
                         <label for="cod_art">Codigo del Articulo</label>
                         <input required class="form-control" type="text" name="cod_art" id="cod_art">
@@ -85,7 +76,7 @@ $damas = $conexion -> consultar($sql);
                         
                     <div>
                         <label for="id_prov">Fabricante</label>
-                        <!--<input required class="form-control" type="number" name="id_prov" id="id_prov">-->
+                        <!--<input required class="form-control" type="text" name="nombre" id="nombre">-->
                         <br>
                         <select required class="form-control" name="id_prov" id="id_prov">
                             <option value="0"> -Seleccione Proveedor- </option>
@@ -94,9 +85,7 @@ $damas = $conexion -> consultar($sql);
                                 $sql = "SELECT * FROM fabricants";
                                 $fabrics = $conexion -> consultar($sql);
                                 foreach ($fabrics as $f){ ?>
-                                    <?php $idfa = $f['id'];?>
-                                    <?php $nomfa = $f['nombre'];?>
-                                    <option value="<?php echo $idfa ?>"><?php echo $nomfa ?></option>
+                                    <option value="<?php echo $f['id'] ?>;"> <?php echo $f['nombre']; ?> </option>
                             <?php } ?>
                             <option value="0"> -Otro Proveedor- </option>
                         </select>
@@ -135,7 +124,7 @@ $damas = $conexion -> consultar($sql);
     </div><!--cierra el col-->
 </div><!--cierra el row-->
 
-<!-- TABLA CON LOS REGISTROS ACTUALES -->
+<!-- TABLA CON REGISTRO A MODIFICAR -->
 <div style="background-color:#abd7fc;">
     <div class="row d-flex justify-content-center mb-5">
         <div class="col-md-10 col-sm-6">
@@ -156,36 +145,37 @@ $damas = $conexion -> consultar($sql);
                 </thead>
                 <tbody >
                     <?php #leemos registros 1 por 1
-                    foreach($damas as $dama){ ?>
+                    foreach($medias as $m){ ?>
                 
                     <tr >
-                        <td><?php echo $dama['cod_art'];?></td>
-                        <td><?php echo $dama['nombre'];?></td>
-                        <td><?php echo $dama['descripcion'];?></td>
-                        <td><?php echo $dama['precio_doc'];?></td>
-                        <td><?php echo $dama['precio_oferta'];?></td>
-                        <td><a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id'];?>">Modificar</a></td>
-                        <td><a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id'];?>">Borrar</a></td>
+                        <td><?php echo $m['cod_art'];?></td>
+                        <td><?php echo $m['nombre'];?></td>
+                        <td><?php echo $m['descripcion'];?></td>
+                        <td><?php echo $m['precio_doc'];?></td>
+                        <td><?php echo $m['precio_oferta'];?></td>
+                        <td><a name="modifica2" id="modifica2" class="btn btn-warning" href="?modifica2=<?php echo $m['id'];?>">Modificar</a></td>
+                        <td><a onclick='wantdelete(event)' name="borrar2" id="borrar2" class="btn btn-danger" href="?borrar2=<?php echo $m['id'];?>">Borrar</a></td>
                     </tr>
-                    <!--cerramos la llave del foreach-->
-                    <?php 
-                            } ?>
+
+                    <?php #cerramos la llave del foreach
+                    } ?>
                 </tbody>
             </table>
-            <h2 class="card-title text-dark card__mobile">Listado de proyectos ingresados: </h2>
+            
+            <h2 class="card-title text-dark card__mobile">Modificar ó Borrar Registros</h2>
             <?php #leemos proyectos 1 por 1
-                foreach($damas as $dama){ ?>
+                foreach($medias as $m){ ?>
                 <div class="col card__mobile  mb-4">
                     <div class="card border border-3 shadow w-100">
                         
                         <div class="card-body">
-                            <p class="card-text text-dark"><?php echo $dama['cod_art'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['id_prov'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['descripcion'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['precio_doc'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['precio_oferta'];?></p>
-                            <a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id'];?>">Modificar</a>
-                            <a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id'];?>">Eliminar</a>
+                            <p class="card-text text-dark"><?php echo $m['cod_art'];?></p>
+                            <p class="card-text text-dark"><?php echo $m['id_prov'];?></p>
+                            <p class="card-text text-dark"><?php echo $m['descripcion'];?></p>
+                            <p class="card-text text-dark"><?php echo $m['precio_doc'];?></p>
+                            <p class="card-text text-dark"><?php echo $m['precio_oferta'];?></p>
+                            <a name="modifica2" id="modifica2" class="btn btn-warning" href="?modifica2=<?php echo $m['id'];?>">Modificar</a>
+                            <a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar2=<?php echo $m['id'];?>">Eliminar</a>
                         </div>
                     </div>
                 </div>
@@ -196,8 +186,8 @@ $damas = $conexion -> consultar($sql);
 <!--Funcion para Preguntar Borrado-->
 <script>
     function wantdelete(e){
-        var respuest = confirm("Desea realmente BORRAR el Registro...?");
-        if (respuest == false) 
+        var respuest2 = confirm("Desea realmente BORRAR el Registro...?");
+        if (respuest2 == false) 
         {
             e.preventDefault();
         }

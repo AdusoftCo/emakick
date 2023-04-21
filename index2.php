@@ -1,9 +1,17 @@
+<?php error_reporting (E_ALL ^ E_NOTICE); ?> 
 <?php include 'conexion.php';?>
-<?php $conexion = new conexion();
+<?php
 
- $sql = "SELECT * FROM `bomb_dama`";
- /*$datos = $conexion->consultar($sql);*/
- $proyectos = $conexion -> consultar($sql);
+$conexion = new conexion();
+
+$sql = "SELECT femeninterior.id_prov, femeninterior.cod_art, femeninterior.descripcion, femeninterior.precio_doc, 
+        femeninterior.precio_oferta, fabricants.nombre FROM femeninterior INNER JOIN fabricants ON femeninterior.id_prov=fabricants.id";
+/*$datos = $conexion->consultar($sql);*/
+$damas = $conexion -> consultar($sql);
+
+$sql = "SELECT medias.id_prov, medias.cod_art, medias.descripcion, medias.precio_doc, medias.precio_oferta,
+        fabricants.nombre FROM medias INNER JOIN fabricants ON medias.id_prov=fabricants.id";
+$medias = $conexion -> consultar($sql);
 ?>
    <!DOCTYPE html>
    <html lang="es">
@@ -48,9 +56,10 @@
         </div>
     </header><!-- End Header -->
 
+
 <!-- Modal -->
 <div class="modal fade" id="portfolio" role="dialog" aria-hidden="true" aria-labelledby="portfol" tabindex="-1">
-  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title text-dark" id="portfol"><strong>Lista de Categorias</strong></h4>
@@ -59,13 +68,115 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="list-group">
-          <a class="list-group-item list-group-item-action" category="damas">Damas</a>
-          <a class="list-group-item list-group-item-action" category="hombres">Hombres</a>
-          <a class="list-group-item list-group-item-action" category="chicJuv">Chicos - Juvenil</a>
-          <a class="list-group-item list-group-item-action" category="medias" data-toggle="modal" data-target="#portfolio2" data-dismiss="modal">Medias</a>
-          <a class="list-group-item list-group-item-action" category="ccamCal">Camisones - Camisetas - Calzas</a>
-        </div>
+          <div class="accordion" id="listaDeCategorias">
+            <div class="card">
+              <div class="card-header bg-light text-secondary" id="headingOne">
+                <h2 class="mb-0">
+                  <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#damas" aria-expanded="true" aria-controls="damas">
+                    Damas
+                  </button>
+                </h2>
+              </div>
+
+              <div id="damas" class="collapse show" aria-labelledby="headingOne" data-parent="#listaDeCategorias">
+                <div class="card-body">
+
+                  <div class="table-responsive">
+                    <table class="table align-middle">
+                      <thead>
+                        <tr>
+                          <th scope="col">Codigo</th>
+                          <th scope="col">Fabricante</th>
+                          <th scope="col">Detalle</th>
+                          <th scope="col">PrecioDoc</th>
+                          <th scope="col">PrecioUni</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <?php
+                        foreach($damas as $d){ ?>
+                        
+                          <tr>
+                            <td><?php echo $d['cod_art']; ?></td>
+                            <td><?php echo $d['nombre']; ?></td>
+                            <td><?php echo $d['descripcion']; ?></td>
+                            <td><?php echo $d['precio_doc']; ?></td>
+                            <td><?php echo $d['precio_oferta']; ?></td>
+                          </tr>
+                        <?php 
+                        }
+                        ?>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header bg-light text-secondary" id="headingTwo">
+                <h2 class="mb-0">
+                  <button class="btn btn-block text-center" type="button" data-toggle="collapse" data-target="#medias" aria-expanded="true" aria-controls="medias">
+                    Medias
+                  </button>
+                </h2>
+              </div>
+              <div id="medias" class="collapse" aria-labelledby="headingTwo" data-parent="#listaDeCategorias">
+                <div class="card-body">
+                  
+                  <div class="table-responsive">
+                    <table class="table align-middle">
+                      <thead>
+                        <tr>
+                          <th scope="col">Codigo</th>
+                          <th scope="col">Fabricante</th>
+                          <th scope="col">Detalle</th>
+                          <th scope="col">PrecioDoc</th>
+                          <th scope="col">PrecioUni</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+
+                        <?php
+                        foreach($medias as $m){ 
+                        ?>
+                          <tr>
+                            <td><?php echo $m['cod_art'];?></td>
+                            <td><?php echo $m['nombre'];?></td>
+                            <td><?php echo $m['descripcion'];?></td>
+                            <td><?php echo $m['precio_doc'];?></td>
+                            <td><?php echo $m['precio_oferta'];?></td>
+                          </tr>
+                        <?php 
+                        }
+                        ?>
+
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header bg-light text-secondary" id="headingThree">
+                <h2 class="mb-0">
+                  <button class="btn btn-block text-center collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Más artículos
+                  </button>
+                </h2>
+              </div>
+              <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#listaDeCategorias">
+                <div class="card-body">
+                  Lista de artículos.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <!--</div>-->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -73,50 +184,8 @@
     </div>
   </div>
 </div>
-<div class="modal fade" id="portfolio2" aria-hidden="true" aria-labelledby="portfol2" tabindex="-1">
-  <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title text-dark" id="portfol2">Lista de Precios</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table align-middle">
-            <thead>
-              <tr>
-                <th scope="col">Codigo</th>
-                <th scope="col">Detalle</th>
-                <th scope="col">Pr-Docena</th>
-                <th scope="col">Pr-Ofer-U</th>
-              </tr>
-            </thead>
-            $categoria = $_GET["categoria"];
-            <tbody>
-              <?php #leemos proyectos 1 por 1
-              foreach($proyectos as $proyecto){ 
-              ?>
-                <tr>
-                  <td><?php echo $proyecto['cod_art'];?></td>
-                  <td><?php echo $proyecto['descripcion'];?></td>
-                  <td><?php echo $proyecto['precio_doc'];?></td>
-                  <td><?php echo $proyecto['precio_oferta'];?></td>
-                </tr>
-              <?php 
-                  } 
-              ?>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+
+
     
 <!-- ======= Contacto Section ======= -->
 <div class="modal fade" id="contacto" tabindex="-1" role="dialog" aria-labelledby="contacto" aria-hidden="true">
@@ -163,10 +232,11 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
 
-    <!--<script src="js/bootstrap.bundle.min.js"></script>-->
+<!--<script src="js/bootstrap.bundle.min.js"></script>-->
     
 <script src="js/main.js"></script>
 <script src="js/envio.js"></script>

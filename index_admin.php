@@ -1,33 +1,55 @@
-<?php include 'header.php';?>
-<?php $conexion = new conexion();# es un objeto de tipo conexion,
-      $proyectos= $conexion->consultar("SELECT * FROM `proyectos`"); ?>
+<?php include 'header.php'; ?> 
 
 <div class="p-5 bg-light">
     <div class="container">
-        <h1 class="display-3">Administrador de Portfolio Personal</h1>
-        <p class="lead">Proyectos Cargados en base de datos</p>
-        <hr class="my-2">
-        <p class="lead" style="font-size:1.5rem;">
-        En abm podra:  <br> Dar de alta un nuevo proyecto <br> Dar de baja un proyecto <br> Modificar un proyecto <br>
-        Cualquier duda <a href="mailto:gis.gonzalez@bue.edu.ar">Click para enviar email</a></p>
-       
+        <h1 class="display-5 text-center">Administrador de Base de Datos</h1>
+        <p class="lead">Categorias - Tablas -</p>
+        <hr class="my-0">
     </div>
 </div>
-<div class ="container" style="background-color:#777777;">
-  <div class="row row-cols-1 row-cols-md-3 g-4">
-    <?php #leemos proyectos 1 por 1
-        foreach($proyectos as $proyecto){ ?>
+<div class ="container" style="background-color:#d70041;">
+    <div class="row">
             <div class="col">
-                <div class="card border border-3 shadow">
-                    <img class="card-img-top" style="object-fit:cover;" src="imagenes/<?php echo $proyecto['imagen'];?>" alt="" width="300">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo $proyecto['nombre'];?></h5>
-                        <p class="card-text"><?php echo $proyecto['descripcion'];?></p>
-                        <a href="#" class="card-text card-blue"><?php echo $proyecto['url'];?></a>
+                        <a href="galeria.php">
+                        <h5 class="card-title text-center">DAMAS</h5>
+                        <img class="card-img-top" style="width: 10rem" src="imagenes/damas.jpg">
+                        </a>
                     </div>
-                </div>
             </div>
-        <?php } ?>
+            <div class="col">
+                    <div class="card-body">
+                        <a href="#">
+                        <h5 class="card-title text-center">HOMBRES</h5>
+                        <img class="card-img-top" style="width: 10rem" src="imagenes/hombre.jpg">
+                        </a>
+                    </div>
+            </div>            
+            <div class="col">        
+                    <div class="card-body">
+                        <a href="#">
+                        <h5 class="card-title text-center">NIÑOS</h5>
+                        <img class="card-img-top" style="width: 10rem" src="imagenes/ninos.jpg">
+                        </a>
+                    </div>
+            </div>            
+            <div class="col">        
+                    <div class="card-body">
+                        <a href="galeria2.php">
+                        <h5 class="card-title text-center">MEDIAS</h5>
+                        <img class="card-img-top" style="width: 10rem" src="imagenes/medias.jpg">
+                        </a>
+                    </div>
+            </div>        
+            <div class="col">        
+                    <div class="card-body">
+                        <a href="#">
+                        <h5 class="card-title text-center">CAMISON & CAMISETAS</h5>
+                        <img class="card-img-top" style="width: 10rem" src="imagenes/camisones.jpg">
+                        </a>
+                    </div>
+            </div>
+        
     </div>
 </div>
 <?php include 'footer.php'; ?>

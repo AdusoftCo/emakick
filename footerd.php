@@ -28,8 +28,14 @@
                         </div>-->
                     </li>
 
-                    <!--<li class="nav-item">
-                        <div class="p-3 d-flex ">
+                    <li class="nav-item">
+                        <div class="container-fluid ">
+                            <a class="navbar-brand p-4 d-flex" href="index_admin.php">
+                            <img src="imagenes/server.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+                            Volver a Categorías
+                            </a>
+                        </div>
+                        <!--<div class="p-3 d-flex ">
                             <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
                             <lord-icon
                                 src="imagenes/112-book-morph-outline-edited.json"
@@ -40,9 +46,10 @@
                                 
                             </lord-icon>
                             <a class="nav-link active" aria-current="page"  href="index_admin.php">Ver proyectos</a>
-                        </div>
+                        </div>-->
                     </li>
-                    <li class="nav-item">
+                    <!--<li class="nav-item">
+                        
                         <div class="p-3 d-flex ">
                             <script src="https://cdn.lordicon.com/xdjxvujz.js"></script>
                             <lord-icon
