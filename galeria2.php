@@ -59,7 +59,8 @@ $medias = $conexion -> consultar($sql);
 ?> 
 
 <!-- FORMULARIO DE ALTA DE REGISTRO -->
-<div class="row d-flex justify-content-center mt-4 mb-5">
+<h2 style="text-align:center; margin: 0; padding: 10px;"><b><i>CATEGORIA -MEDIAS-</i></b></h2>
+<div class="row d-flex justify-content-center mt-0 mb-0">
     <div class="col-md-8 col-sm-10">
         <div class="card" style="background-color:#0daca5;">
             <div class="card-header text-center">
@@ -126,7 +127,7 @@ $medias = $conexion -> consultar($sql);
 
 <!-- TABLA CON REGISTRO A MODIFICAR -->
 <div style="background-color:#abd7fc;">
-    <div class="row d-flex justify-content-center mb-5">
+    <div class="row d-flex justify-content-center mb-0">
         <div class="col-md-10 col-sm-6">
             <div>
                 <h2 style="text-align:center; padding: 10px;"><b>Modificar ó Borrar Registros</b></h2>

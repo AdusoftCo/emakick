@@ -14,7 +14,7 @@ if($_POST){
     #levantamos los datos del formulario
     #$id = $_SESSION['id'];
     $cod_art = $_POST['cod_art'];
-    $id_prov = $_POST['id_prov'];
+    $id_prov = implode($_POST['id_prov']);
     $descripcion = $_POST['descripcion'];
     $docena = $_POST['precio_doc'];
     $oferta = $_POST['precio_oferta'];
@@ -31,8 +31,8 @@ if($_POST){
     #creo una instancia(objeto) de la clase de conexion
     $conexion = new conexion();
     
-    $sql = "INSERT INTO `femeninterior` (`id`, `cod_art`, `id_prov`, `descripcion`, `precio_doc`, `precio_oferta`, `fecha_alta`, `fecha_baja`, `imagen`) 
-            VALUES (NULL, '$cod_art', $id_prov, '$descripcion', $docena, $oferta, '$fecha_alta', NULL, NULL)";
+    $sql = "INSERT INTO `femeninterior` (`id`, `cod_art`, `id_prov`, `descripcion`, `precio_doc`, `precio_oferta`, `fecha_alta`) 
+            VALUES (NULL, '$cod_art', '$id_prov', '$descripcion', '$docena', '$oferta', '$fecha_alta')";
     
     $id_proyecto = $conexion->ejecutar($sql);
 
@@ -68,7 +68,8 @@ $damas = $conexion -> consultar($sql);
 ?> 
 
 <!-- FORMULARIO DE ALTA DE REGISTRO -->
-<div class="row d-flex justify-content-center mt-4 mb-5">
+<h2 style="text-align:center; margin: 0; padding: 10px;"><b><i>CATEGORIA -DAMAS-</i></b></h2>
+<div class="row d-flex justify-content-center mt-0 mb-0">
     <div class="col-md-8 col-sm-10">
         <div class="card" style="background-color:#2bb6b0;">
             <div class="card-header text-center">
@@ -91,12 +92,10 @@ $damas = $conexion -> consultar($sql);
                             <option value="0"> -Seleccione Proveedor- </option>
                             <?php
                                 $conexion = new conexion();
-                                $sql = "SELECT * FROM fabricants";
-                                $fabrics = $conexion -> consultar($sql);
+                                $sql2 = "SELECT * FROM fabricants";
+                                $fabrics = $conexion -> consultar($sql2);
                                 foreach ($fabrics as $f){ ?>
-                                    <?php $idfa = $f['id'];?>
-                                    <?php $nomfa = $f['nombre'];?>
-                                    <option value="<?php echo $idfa ?>"><?php echo $nomfa ?></option>
+                                    <option value="<?php echo $f['id'] ?>"><?php echo $f['nombre'] ?></option>
                             <?php } ?>
                             <option value="0"> -Otro Proveedor- </option>
                         </select>
@@ -164,8 +163,8 @@ $damas = $conexion -> consultar($sql);
                         <td><?php echo $dama['descripcion'];?></td>
                         <td><?php echo $dama['precio_doc'];?></td>
                         <td><?php echo $dama['precio_oferta'];?></td>
-                        <td><a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id'];?>">Modificar</a></td>
-                        <td><a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id'];?>">Borrar</a></td>
+                        <td><a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id']; ?>">Modificar</a></td>
+                        <td><a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id']; ?>">Borrar</a></td>
                     </tr>
                     <!--cerramos la llave del foreach-->
                     <?php 
@@ -192,6 +191,7 @@ $damas = $conexion -> consultar($sql);
             <?php } ?>
         </div><!--cierra el col-->  
     </div>
+<?php include 'footerd.php'; ?>
 </div>
 <!--Funcion para Preguntar Borrado-->
 <script>
@@ -203,5 +203,3 @@ $damas = $conexion -> consultar($sql);
         }
     }
 </script>
-
-<?php include 'footerd.php'; ?>

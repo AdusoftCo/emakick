@@ -49,7 +49,7 @@ if($_POST){
     die();
 }
 ?>
-<?php #leemos proyectos 1 por 1
+<?php  #leemos proyectos 1 por 1
 foreach($proyecto as $fila){ ?>
     <div class="row d-flex justify-content-center mt-4 mb-5">
         <div class="col-md-8 col-sm-10">
@@ -70,7 +70,7 @@ foreach($proyecto as $fila){ ?>
                             <label for="id_prov">Fabricante</label>
                             <!--<input required class="form-control" type="number" name="id_prov" id="id_prov" value="">-->
                             <br>
-                            <select required class="form-control" name="id_prov" id="id_prov">
+                            <select required class="form-control" id="id_prov[]" name="id_prov[]">
                                 
                             <?php   $conexion = new conexion();
                                     $sql = "SELECT * FROM fabricants";
@@ -78,9 +78,9 @@ foreach($proyecto as $fila){ ?>
                                 <?php
                                     foreach ($fabrics as $f){ ?>
                                         <?php if ($f['id'] == $fila['id_prov']){ ?>
-                                            <option value="0"><?php echo $f['nombre']; ?></option>
+                                            <option value="0"> <?php echo $f['nombre']; ?> </option>
                                             <?php foreach ($fabrics as $f){ ?>
-                                            <option value="<?php $f['id']?>"><?php echo $f['nombre']; ?></option>
+                                            <option value="<?php $f['id']; ?>"> <?php echo $f['nombre']; ?> </option>
                                            <?php } ?>
                                          <?php } ?>
                                 <?php } ?>

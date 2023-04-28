@@ -36,11 +36,11 @@ if($_POST){
     #creo una instancia(objeto) de la clase de conexion
     
     $conexion = new conexion();
-    $sql = "UPDATE `medias` SET `cod_art` = '$cod_art', `id_prov` = '$id_prov', 
+    $sql2 = "UPDATE `medias` SET `cod_art` = '$cod_art', `id_prov` = '$id_prov', 
             `descripcion` = '$descripcion', `precio_doc` = '$docena', 
             `precio_oferta` = '$oferta', `fecha_alta` = '$fecha_alta'
              WHERE `medias`.`id` = '$id';";
-    $id_proyect2 = $conexion->ejecutar($sql);
+    $id_proyect2 = $conexion->ejecutar($sql2);
 
     header("location:galeria2.php");
     die();
@@ -99,9 +99,9 @@ foreach($proyecto as $fila){ ?>
                 </div> <!--cierra el body-->
             </div>
         </div><!--cierra el col-->
+    <?php include 'footer.php'; ?>
     </div><!--cierra el row-->
 <?php #cerramos la llave del foreach
         } ?>
     
 
-<?php include 'footer.php'; ?>
