@@ -41,25 +41,35 @@ if($_POST){
             `precio_oferta` = '$oferta', `fecha_alta` = '$fecha_alta'
              WHERE `medias`.`id` = '$id';";
     $id_proyect2 = $conexion->ejecutar($sql2);
-
-    header("location:galeria2.php");
-    die();
+    
+    if ($id_proyect2 === false) {
+    // Display an error message or handle the error appropriately
+        echo "Error executing SQL query: " . $conexion->error;
+        die();
+        }else{
+    // Redirect the user to galeria.php
+            header("Location:galeria2.php");
+            exit();
+        }
+    #header("location:galeria2.php");
+    #die();
 }
 
 # TABLA CON REGISTRO A MODIFICAR
 ?>
+
 <?php #leemos proyectos 1 por 1
 foreach($proyecto as $fila){ ?>
     <div class="row d-flex justify-content-center mt-4 mb-5">
         <div class="col-md-8 col-sm-10">
             <div class="card" style="background-color:#0daca5;">
                 <div class="card-header">
-                    <i><b>Datos del Registro a Modificar</b></i>
+                    <i><b>Datos del Registro a MODIFICAR</b></i>
                 </div>
 
                 <div class="card-body">
                         <!--para recepcionar archivos uso enctype-->
-                    <form action="galeria2.php" method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data">
                         <div>
                             <label for="cod_art">Codigo del Articulo</label>
                             <input required class="form-control" type="text" name="cod_art" id="cod_art" value="<?php echo $fila['cod_art']; ?>">
@@ -67,7 +77,23 @@ foreach($proyecto as $fila){ ?>
                             
                         <div>
                             <label for="id_prov">Fabricante</label>
-                            <input required class="form-control" type="number" name="id_prov" id="id_prov" value="<?php echo $fila['id_prov']; ?>">
+                            <!--<input required class="form-control" type="number" name="id_prov" id="id_prov" value="">-->
+                            <br>
+                            <select required class="form-control" id="id_prov" name="id_prov">
+                            <?php   
+                                $conexion = new conexion();
+                                $sql = "SELECT * FROM fabricants";
+                                $fabrics = $conexion -> consultar($sql);
+                                foreach ($fabrics as $f){ 
+                                    if ($f['id'] == $fila['id_prov']){ ?>
+                                        <option value="<?php echo $f['id']; ?>"> <?php echo $f['nombre']; ?> </option>
+                                    <?php } ?>
+                                <?php } ?>
+                                
+                                    <?php foreach ($fabrics as $f){  ?>
+                                            <option value="<?php echo $f['id']; ?>"> <?php echo $f['nombre']; ?> </option>
+                                    <?php } ?>
+                            </select>                            
                         </div>
                         
                         <div>
@@ -92,16 +118,26 @@ foreach($proyecto as $fila){ ?>
                         
                         <div>
                             <br>
-                            <input class="btn btn-warning btn-md" type="submit" value="Enviar Modificación">
+                            <input class="btn btn-warning btn-md" type="submit" value="Modificar Registro" onclick="processForm(event);">
                             <input class="btn btn-danger btn-md mx-2" type="button" name="Cancelar" value="Cancelar" onClick="location.href='galeria2.php'">
                         </div>
                     </form>
                 </div> <!--cierra el body-->
-            </div>
+            </div>  <!--cierra el card-->
         </div><!--cierra el col-->
-    <?php include 'footer.php'; ?>
     </div><!--cierra el row-->
 <?php #cerramos la llave del foreach
-        } ?>
+    } ?>
     
+<script type="text/javascript">
+    function processForm(e) {
+        var resulta = confirm("¿Desea realmente MODIFICAR el Registro...?");
 
+        if (resulta == false) {
+            e.preventDefault();
+        }else{
+            alert('Ya lo MODIFICASTE!');
+        }
+    }
+</script>
+<?php include 'footer.php'; ?>

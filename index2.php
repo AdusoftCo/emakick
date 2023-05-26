@@ -13,21 +13,21 @@ $sql = "SELECT medias.id_prov, medias.cod_art, medias.descripcion, medias.precio
         fabricants.nombre FROM medias INNER JOIN fabricants ON medias.id_prov=fabricants.id";
 $medias = $conexion -> consultar($sql);
 ?>
-   <!DOCTYPE html>
-   <html lang="es">
-   <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!DOCTYPE html>
+  <html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
-        <title>Portafolio2</title>
-        <link rel="shortcut icon" type="image/x-icon" href="imagenes/favicon.ico">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-        <link href="css/bootstrap.css" rel="stylesheet">
-        <link href="css/estilos2.css" rel="stylesheet">
-    </head>
-<body>
+    <title>Portafolio2</title>
+    <link rel="shortcut icon" type="image/x-icon" href="imagenes/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/estilos2.css" rel="stylesheet">
+  </head>
+  <body>
   <!-- Navegación -->
     <header id="header">
         <div class="container">

@@ -1,4 +1,5 @@
 <?php include 'headerd.php';?>
+
 <?php
 if($_POST){  # si hay envio de datos, los inserto en la base de datos  
     #$id = $_SESSION['id'];
@@ -32,6 +33,12 @@ if($_POST){  # si hay envio de datos, los inserto en la base de datos
  
 if($_GET){
     #ademas de borrar de la base , tenemos que borrar la foto de la carpeta imagenes
+    if(isset($_GET['modifica2'])){
+        $id = $_GET['modifica2'];
+        header("Location:modifica2.php?modifica2=".$id);
+        die();
+    }
+
     if(isset($_GET['borrar2'])){
         $id = $_GET['borrar2'];
         $conexion = new conexion();
@@ -43,12 +50,6 @@ if($_GET){
          header("Location:galeria2.php");
          die();
     }
-
-    if(isset($_GET['modifica2'])){
-        $id = $_GET['modifica2'];
-        header("Location:modifica2.php?modifica2=".$id);
-        die();
-    }
 }    
 
 $conexion = new conexion();
@@ -59,17 +60,18 @@ $medias = $conexion -> consultar($sql);
 ?> 
 
 <!-- FORMULARIO DE ALTA DE REGISTRO -->
-<h2 style="text-align:center; margin: 0; padding: 10px;"><b><i>CATEGORIA -MEDIAS-</i></b></h2>
+
 <div class="row d-flex justify-content-center mt-0 mb-0">
+    <h2 style="text-align:center; margin: 0; padding: 10px;"><b><i>CATEGORIA -MEDIAS-</i></b></h2>
     <div class="col-md-8 col-sm-10">
         <div class="card" style="background-color:#0daca5;">
             <div class="card-header text-center">
-                <i><b>Alta de Nuevo Registro</b></i>
+                <i><b>ALTA de Nuevo Registro</b></i>
             </div>
 
             <div class="card-body">
                     <!--para recepcionar archivos uso enctype-->
-                <form action="galeria2.php" method="post" enctype="multipart/form-data">
+                <form action="#" method="post" enctype="multipart/form-data">
                     <div>
                         <label for="cod_art">Codigo del Articulo</label>
                         <input required class="form-control" type="text" name="cod_art" id="cod_art">
@@ -88,7 +90,7 @@ $medias = $conexion -> consultar($sql);
                                 foreach ($fabrics as $f){ ?>
                                     <option value="<?php echo $f['id'] ?>;"> <?php echo $f['nombre']; ?> </option>
                             <?php } ?>
-                            <option value="0"> -Otro Proveedor- </option>
+                            
                         </select>
                     </div>
                     
@@ -114,7 +116,7 @@ $medias = $conexion -> consultar($sql);
 
                     <div>
                         <br>
-                        <input class="btn btn-warning" type="submit" value="Enviar Registro ...">
+                        <input class="btn btn-warning" type="submit" value="Grabar Registro" onclick="return processForm(event);">
                     </div>
                 
                 </form>
@@ -125,7 +127,7 @@ $medias = $conexion -> consultar($sql);
     </div><!--cierra el col-->
 </div><!--cierra el row-->
 
-<!-- TABLA CON REGISTRO A MODIFICAR -->
+<!-- TABLA CON REGISTRO ACTUALES -->
 <div style="background-color:#abd7fc;">
     <div class="row d-flex justify-content-center mb-0">
         <div class="col-md-10 col-sm-6">
@@ -147,7 +149,6 @@ $medias = $conexion -> consultar($sql);
                 <tbody >
                     <?php #leemos registros 1 por 1
                     foreach($medias as $m){ ?>
-                
                     <tr >
                         <td><?php echo $m['cod_art'];?></td>
                         <td><?php echo $m['nombre'];?></td>
@@ -183,16 +184,25 @@ $medias = $conexion -> consultar($sql);
             <?php } ?>
         </div><!--cierra el col-->  
     </div>
+<?php include 'footerd.php'; ?>
 </div>
 <!--Funcion para Preguntar Borrado-->
 <script>
-    function wantdelete(e){
-        var respuest2 = confirm("Desea realmente BORRAR el Registro...?");
-        if (respuest2 == false) 
-        {
+    function processForm(e) {
+        var respuest = confirm("Desea GRABAR el Registro ...?");
+        if (respuest == false) {
             e.preventDefault();
+        }else{
+            alert('ALTA Exitosa !!!');
+        }
+    }
+
+    function wantdelete(e){
+        var respuest2 = confirm("Desea realmente BORRAR el Registro ...?");
+        if (respuest2 == false) {
+            e.preventDefault();
+        }else{
+            alert('BORRADO Con fir ma do !!!');
         }
     }
 </script>
-
-<?php include 'footerd.php'; ?>

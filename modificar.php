@@ -1,17 +1,20 @@
 <?php include 'headerd.php';
 if($_GET){
     if(isset($_GET['modificar'])){
+        
         $id = $_GET['modificar'];
-    
+        
         $_SESSION['id_proyecto'] = $id;
         #vamos a consultar para llenar la tabla 
         $conexion = new conexion();
+        
         $proyecto= $conexion->consultar("SELECT * FROM `femeninterior` WHERE id=".$id);
     }
 }
 #femeninterior.cod_art, femeninterior.id_prov, femeninterior.descripcion, femeninterior.precio_doc, 
 #        femeninterior.precio_oferta, femeninterior.fecha_alta FROM femeninterior
 if($_POST){
+    
     $id = $_SESSION['id_proyecto'];
     
     #debemos recuperar la imagen actual y borrarla del servidor para lugar pisar con la nueva imagen en el server y en la base de datos
@@ -23,6 +26,15 @@ if($_POST){
     #levantamos los datos del formulario
     $cod_art = $_POST['cod_art'];
     $id_prov = $_POST['id_prov'];
+    // Debug code
+    #echo "Selected id_prov: " . $id_prov . "<br>";
+
+    // Check if the id_prov exists in the fabricants table
+    #$sql = "SELECT COUNT(*) AS count FROM fabricants WHERE id = $id_prov";
+    #$result = $conexion->consultar($sql);
+    #$count = $result[0]['count'];
+    #echo "Matching rows in fabricants: " . $count . "<br>";
+
     $descripcion = $_POST['descripcion'];
     $docena = $_POST['precio_doc'];
     $oferta = $_POST['precio_oferta'];
@@ -44,23 +56,30 @@ if($_POST){
             `precio_oferta` = '$oferta' , `fecha_alta` = '$fecha_alta' 
             WHERE `femeninterior`.`id` = '$id';";
     $id_proyecto = $conexion->ejecutar($sql);
-    
-    header("location:galeria.php");
+    if ($id_proyecto === false) {
+    // Display an error message or handle the error appropriately
+    echo "Error executing SQL query: " . $conexion->error;
     die();
+    }else{
+    // Redirect the user to galeria.php
+    header("Location: galeria.php");
+    exit();
+    }
 }
 ?>
-<?php  #leemos proyectos 1 por 1
+
+<?php #leemos proyectos 1 por 1
 foreach($proyecto as $fila){ ?>
     <div class="row d-flex justify-content-center mt-4 mb-5">
         <div class="col-md-8 col-sm-10">
             <div class="card" style="background-color:#2bb6b0;">
-                <div class="card-header">
-                    <i><b>Datos del Registro a Modificar</b></i>
+                <div class="card-header text-center">
+                    <i><b>Datos del Registro a MODIFICAR</b></i>
                 </div>
 
                 <div class="card-body">
                         <!--para recepcionar archivos uso enctype-->
-                    <form action="galeria.php" method="post" enctype="multipart/form-data">
+                    <form method="post" enctype="multipart/form-data">
                         <div>
                             <label for="cod_art">Codigo del Articulo</label>
                             <input required class="form-control" type="text" name="cod_art" id="cod_art" value="<?php echo $fila['cod_art']; ?>">
@@ -70,21 +89,20 @@ foreach($proyecto as $fila){ ?>
                             <label for="id_prov">Fabricante</label>
                             <!--<input required class="form-control" type="number" name="id_prov" id="id_prov" value="">-->
                             <br>
-                            <select required class="form-control" id="id_prov[]" name="id_prov[]">
-                                
-                            <?php   $conexion = new conexion();
-                                    $sql = "SELECT * FROM fabricants";
-                                    $fabrics = $conexion -> consultar($sql); ?>
-                                <?php
-                                    foreach ($fabrics as $f){ ?>
-                                        <?php if ($f['id'] == $fila['id_prov']){ ?>
-                                            <option value="0"> <?php echo $f['nombre']; ?> </option>
-                                            <?php foreach ($fabrics as $f){ ?>
-                                            <option value="<?php $f['id']; ?>"> <?php echo $f['nombre']; ?> </option>
-                                           <?php } ?>
-                                         <?php } ?>
-                                <?php } ?>
-                                            <option value="0"> -Otro Proveedor- </option>
+                            <select required class="form-control" id="id_prov" name="id_prov">
+                            <?php   
+                                $conexion = new conexion();
+                                $sql = "SELECT * FROM fabricants";
+                                $fabrics = $conexion -> consultar($sql);
+                                    foreach ($fabrics as $f){ 
+                                        if ($f['id'] == $fila['id_prov']){  ?>
+                                            <option value="<?php echo $f['id']; ?>"> <?php echo $f['nombre']; ?> </option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                    
+                                    <?php foreach ($fabrics as $f){  ?>
+                                            <option value="<?php echo $f['id']; ?>"> <?php echo $f['nombre']; ?> </option>
+                                    <?php } ?>
                             </select>
                         </div>
                         
@@ -110,17 +128,25 @@ foreach($proyecto as $fila){ ?>
 
                         <div>
                             <br>
-                            <input class="btn btn-warning btn-md" type="submit" value="Enviar Modificación">
+                            <input class="btn btn-warning btn-md" type="submit" value="Modificar Registro" onclick="return processForm(event);">
                             <input class="btn btn-danger btn-md mx-2" type="button" name="Cancelar" value="Cancelar" onClick="location.href='galeria.php'">
                         </div>
-                    
                     </form>
                 </div> <!--cierra el body-->
-            </div>
+            </div> <!--cierra el card-->
         </div><!--cierra el col-->
     </div><!--cierra el row-->
-<?php #cerramos la llave del foreach
-        } ?>
-    
+<?php } ?>
+
+<script type="text/javascript">
+    function processForm(e){
+        var respuest = confirm("¿Desea realmente MODIFICAR el Registro...?");
+        if (respuest == false) {
+            e.preventDefault();
+        }else{
+            alert('Ya lo MODIFICASTE!');
+        }
+    }
+</script>
 
 <?php include 'footer.php'; ?>

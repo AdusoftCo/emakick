@@ -14,7 +14,7 @@ if($_POST){
     #levantamos los datos del formulario
     #$id = $_SESSION['id'];
     $cod_art = $_POST['cod_art'];
-    $id_prov = implode($_POST['id_prov']);
+    $id_prov = $_POST['id_prov'];
     $descripcion = $_POST['descripcion'];
     $docena = $_POST['precio_doc'];
     $oferta = $_POST['precio_oferta'];
@@ -41,6 +41,12 @@ if($_POST){
 }
 #Seccion que TOMA variables pa Borrar o Modificar Registro
 if($_GET){
+    if(isset($_GET['modificar'])){
+        $id = $_GET['modificar'];
+        header("Location:modificar.php?modificar=".$id);
+        die();
+    }
+
     #ademas de borrar de la base , tenemos que borrar la foto de la carpeta imagenes
     if(isset($_GET['borrar'])){
         $id = $_GET['borrar'];
@@ -53,19 +59,25 @@ if($_GET){
          header("Location:galeria.php");
          die();
     }
-
-    if(isset($_GET['modificar'])){
-        $id = $_GET['modificar'];
-        header("Location:modificar.php?modificar=".$id);
-        die();
-    }
 }    
 
 $conexion = new conexion();
-$sql = "SELECT `femeninterior`.`id`,`femeninterior`.`cod_art`, `femeninterior`.`id_prov`, `femeninterior`.`descripcion`, `femeninterior`.`precio_doc`, 
+$sql = "SELECT `femeninterior`.`id`, `femeninterior`.`cod_art`, `femeninterior`.`id_prov`, `femeninterior`.`descripcion`, `femeninterior`.`precio_doc`, 
         `femeninterior`.`precio_oferta`, `fabricants`.`nombre` FROM `femeninterior` INNER JOIN `fabricants` ON `femeninterior`.`id_prov`=`fabricants`.`id`";
+
 $damas = $conexion -> consultar($sql);
 ?> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
 
 <!-- FORMULARIO DE ALTA DE REGISTRO -->
 <h2 style="text-align:center; margin: 0; padding: 10px;"><b><i>CATEGORIA -DAMAS-</i></b></h2>
@@ -73,12 +85,12 @@ $damas = $conexion -> consultar($sql);
     <div class="col-md-8 col-sm-10">
         <div class="card" style="background-color:#2bb6b0;">
             <div class="card-header text-center">
-                <i><b>Alta de Nuevo Registro</b></i>
+                <i><b>ALTA de Nuevo Registro</b></i>
             </div>
 
             <div class="card-body">
                     <!--para recepcionar archivos uso enctype-->
-                <form action="galeria.php" method="post" enctype="multipart/form-data">
+                <form action="#" method="post" enctype="multipart/form-data">
                     <div>
                         <label for="cod_art">Codigo del Articulo</label>
                         <input required class="form-control" type="text" name="cod_art" id="cod_art">
@@ -97,12 +109,12 @@ $damas = $conexion -> consultar($sql);
                                 foreach ($fabrics as $f){ ?>
                                     <option value="<?php echo $f['id'] ?>"><?php echo $f['nombre'] ?></option>
                             <?php } ?>
-                            <option value="0"> -Otro Proveedor- </option>
+                            
                         </select>
                     </div>
                     
                     <div>
-                        <label for="descripcion">Detalle</label>
+                        <label for="descripcion">Descripción</label>
                         <input required class="form-control" name="descripcion" id="descripcion">
                     </div>
 
@@ -123,7 +135,7 @@ $damas = $conexion -> consultar($sql);
 
                     <div>
                         <br>
-                        <input class="btn btn-warning" type="submit" value="Enviar Registro ...">
+                        <input class="btn btn-warning" type="submit" value="Grabar Registro" onclick="processForm(event);">
                     </div>
                 
                 </form>
@@ -156,50 +168,100 @@ $damas = $conexion -> consultar($sql);
                 <tbody >
                     <?php #leemos registros 1 por 1
                     foreach($damas as $dama){ ?>
-                
-                    <tr >
-                        <td><?php echo $dama['cod_art'];?></td>
-                        <td><?php echo $dama['nombre'];?></td>
-                        <td><?php echo $dama['descripcion'];?></td>
-                        <td><?php echo $dama['precio_doc'];?></td>
-                        <td><?php echo $dama['precio_oferta'];?></td>
-                        <td><a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id']; ?>">Modificar</a></td>
-                        <td><a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id']; ?>">Borrar</a></td>
-                    </tr>
+                        <tr>
+                            <td><?php echo $dama['cod_art'];?></td>
+                            <td><?php echo $dama['nombre'];?></td>
+                            <td><?php echo $dama['descripcion'];?></td>
+                            <td><?php echo $dama['precio_doc'];?></td>
+                            <td><?php echo $dama['precio_oferta'];?></td>
+                            <td><a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id']; ?>">Modificar</a></td>
+                            <td><a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id']; ?>">Borrar</a></td>
+                        </tr>
                     <!--cerramos la llave del foreach-->
                     <?php 
-                            } ?>
+                    } ?>
                 </tbody>
             </table>
-            <h2 class="card-title text-dark card__mobile">Listado de proyectos ingresados: </h2>
+
+        <!--Tabla con Registros en Mobile-->
+            <h2 class="card-title text-center card__mobile">Listado de Artículos Ingresados</h2>
             <?php #leemos proyectos 1 por 1
                 foreach($damas as $dama){ ?>
                 <div class="col card__mobile  mb-4">
                     <div class="card border border-3 shadow w-100">
-                        
-                        <div class="card-body">
-                            <p class="card-text text-dark"><?php echo $dama['cod_art'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['id_prov'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['descripcion'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['precio_doc'];?></p>
-                            <p class="card-text text-dark"><?php echo $dama['precio_oferta'];?></p>
-                            <a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id'];?>">Modificar</a>
-                            <a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id'];?>">Eliminar</a>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th scope="col">Cod.Artículo: </th>
+                                        <td><?php echo $dama['cod_art'];?></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Proveedor    : </th>
+                                        <td><?php echo $dama['nombre'];?></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Descripción  : </th>
+                                        <td><?php echo $dama['descripcion'];?></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Precio Docena: $</th>
+                                        <td><?php echo $dama['precio_doc'];?></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Oferta Unidad: $</th>
+                                        <td><?php echo $dama['precio_oferta'];?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-center">
+                                <div>
+                                    <a name="modificar" id="modificar" class="btn btn-warning" href="?modificar=<?php echo $dama['id'];?>">Modificar</a>
+                                    <a onclick='wantdelete(event)' name="eliminar" id="eliminar" class="btn btn-danger" href="?borrar=<?php echo $dama['id'];?>">Eliminar</a>
+                                </div>
+                            </div>
+                            
                         </div>
+                        
+                        <!--<div class="card-body">
+                            <p class="card-text text-dark"></p>
+                            <p class="card-text text-dark"></p>
+                            <p class="card-text text-dark"></p>
+                            <p class="card-text text-dark"></p>
+                            <p class="card-text text-dark"></p>
+                            
+                        </div>-->
                     </div>
                 </div>
             <?php } ?>
         </div><!--cierra el col-->  
     </div>
-<?php include 'footerd.php'; ?>
+    <?php include 'footerd.php'; ?>
 </div>
+
 <!--Funcion para Preguntar Borrado-->
-<script>
-    function wantdelete(e){
-        var respuest = confirm("Desea realmente BORRAR el Registro...?");
-        if (respuest == false) 
-        {
+
+<script type="text/javascript">
+    function processForm(e) {
+        var respuest = confirm("Desea GRABAR el Registro ...?");
+        if (respuest == false) {
             e.preventDefault();
+        }else{
+            alert('ALTA Exitosa !!!');
+        }
+    }
+
+    function wantdelete(e) {
+        var respuest2 = confirm("Desea realmente BORRAR el Registro ...?");
+        if (respuest2 == false) {
+            e.preventDefault();
+        }else{
+            alert('BORRADO Con fir ma do !!!');
         }
     }
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</body>
+</html>
